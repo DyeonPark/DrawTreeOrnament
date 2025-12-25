@@ -1,7 +1,7 @@
 
 import { createClient } from '@supabase/supabase-js';
 
-// These environment variables will need to be set in a .env file
+// These envirornament variables will need to be set in a .env file
 // VITE_SUPABASE_URL=https://your-project.supabase.co
 // VITE_SUPABASE_ANON_KEY=your-anon-key
 

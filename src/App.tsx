@@ -486,7 +486,7 @@ function App() {
           <div style={{ width: '80%', height: '1px', background: 'rgba(255,255,255,0.2)', margin: '25px 0' }} />
 
           <div style={{ color: 'rgba(255,255,255,0.5)', fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '5px' }}>
-            draw-tree-onment.vercel.app 🌲
+            draw-tree-ornament.vercel.app 🌲
           </div>
         </div>
       </div>

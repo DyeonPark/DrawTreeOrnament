@@ -14,3 +14,13 @@
 ### 지원 브라우저 및 양식
 1. 웹 페이지 형식으로 개발합니다
 2. 단, 노트북이나 핸드폰에서 접속해도 정상적으로 보일 수 있도록 페이지의 가운데에 스마트폰 사이즈의 세로 방향으로 페이지를 배치합니다
+
+
+### 기본 트리 디자인
+![alt text](image-4.png)
+
+### UI 예시 이미지
+![alt text](image.png)
+![alt text](image-1.png)
+![alt text](image-2.png)
+![alt text](image-3.png)

@@ -27,4 +27,5 @@ dist-ssr
 *.env.localhost
 *.png
 *.jpg
-requirements.md
+.*/requirements.md
+deploy.md
