@@ -1,5 +1,4 @@
 import { useState, useEffect, useRef } from 'react';
-import html2canvas from 'html2canvas';
 import { supabase } from './supabaseClient';
 import { generateCardImage } from './utils/generateCardImage';
 import MobileWrapper from './components/MobileWrapper'
