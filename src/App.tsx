@@ -514,11 +514,11 @@ function App() {
               zIndex: 0
             }} />
 
-            <div style={{ margin: '0 0 -5px 0', position: 'relative', zIndex: 2, display: 'flex', justifyContent: 'center' }}>
-              <ChristmasTree ornaments={ornaments} />
+            <div style={{ margin: '0 0 10px 0', position: 'relative', zIndex: 2, display: 'flex', justifyContent: 'center' }}>
+              <ChristmasTree ornaments={ornaments} noAnimation={true} />
             </div>
 
-            <div style={{ color: 'white', fontSize: '1.4rem', fontWeight: 'bold', marginTop: '0', textShadow: '0 2px 10px rgba(0,0,0,0.8)', zIndex: 2, textAlign: 'center' }}>
+            <div style={{ color: 'white', fontSize: '1.4rem', fontWeight: 'bold', marginTop: '-5px', textShadow: '0 2px 10px rgba(0,0,0,0.8)', zIndex: 2, textAlign: 'center' }}>
               {treeName || '우리들의 크리스마스'}
             </div>
 
