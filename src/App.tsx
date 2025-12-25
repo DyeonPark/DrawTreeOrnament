@@ -7,7 +7,7 @@ import ChristmasTree from './components/ChristmasTree'
 import DrawingModal from './components/DrawingModal'
 import LandingPage from './components/LandingPage'
 import CreateTreeModal from './components/CreateTreeModal'
-import AdBar from './components/AdBar'
+
 
 type ViewState = 'landing' | 'tree';
 
