@@ -442,7 +442,7 @@ function App() {
         onClose={() => setIsCreateModalOpen(false)}
         onCreate={handleCreateTree}
       />
-      <AdBar />
+      {/* <AdBar /> */}
       {/* Hidden Card Layout for Export - Improved for Compatibility */}
       <div style={{ position: 'absolute', left: '-9999px', top: '-9999px' }}>
         <div
@@ -515,7 +515,7 @@ function App() {
             }} />
 
             <div style={{ margin: '0 0 10px 0', position: 'relative', zIndex: 2, display: 'flex', justifyContent: 'center' }}>
-              <ChristmasTree ornaments={ornaments} noAnimation={true} />
+              <ChristmasTree ornaments={ornaments} />
             </div>
 
             <div style={{ color: 'white', fontSize: '1.4rem', fontWeight: 'bold', marginTop: '-5px', textShadow: '0 2px 10px rgba(0,0,0,0.8)', zIndex: 2, textAlign: 'center' }}>

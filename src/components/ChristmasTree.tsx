@@ -2,7 +2,6 @@ import './ChristmasTree.css';
 
 interface ChristmasTreeProps {
     ornaments?: string[]; // array of dataURLs
-    noAnimation?: boolean;
 }
 
 // Coordinates based on viewBox="0 0 300 400"
@@ -28,9 +27,9 @@ const ORNAMENT_POSITIONS = [
     { x: 140, y: 310 }, { x: 160, y: 310 },
 ];
 
-const ChristmasTree = ({ ornaments = [], noAnimation = false }: ChristmasTreeProps) => {
+const ChristmasTree = ({ ornaments = [] }: ChristmasTreeProps) => {
     return (
-        <div className={`tree-container ${noAnimation ? 'no-animation' : ''}`}>
+        <div className="tree-container">
             <svg
                 viewBox="0 0 300 410"
                 className="tree-svg"

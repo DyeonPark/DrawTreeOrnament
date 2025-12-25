@@ -18,7 +18,6 @@
 
 /* Animations if any needed inside SVG, can be done with CSS too */
 text {
-    animation: pulse 2s infinite ease-in-out;
     transform-box: fill-box;
     transform-origin: center;
 }
