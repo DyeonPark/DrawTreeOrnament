@@ -1,9 +1,11 @@
 import { useState, useEffect, useRef } from 'react';
 import html2canvas from 'html2canvas';
 import { supabase } from './supabaseClient';
+import { generateCardImage } from './utils/generateCardImage';
 import MobileWrapper from './components/MobileWrapper'
 import SnowBackground from './components/SnowBackground'
 import ChristmasTree from './components/ChristmasTree'
+import ChristmasTreeCard from './components/ChristmasTreeCard'
 import DrawingModal from './components/DrawingModal'
 import LandingPage from './components/LandingPage'
 import CreateTreeModal from './components/CreateTreeModal'
@@ -194,34 +196,35 @@ function App() {
   const handleDownloadImage = async () => {
     if (!cardRef.current) return;
     try {
-      // 1. Ensure all images within the card are loaded
-      const images = cardRef.current.querySelectorAll('img');
-      const loadPromises = Array.from(images).map(img => {
-        if (img.complete) return Promise.resolve();
-        return new Promise((resolve, reject) => {
-          img.onload = resolve;
-          img.onerror = reject;
-        });
-      });
-      await Promise.all(loadPromises);
+      console.log('Starting card image generation...');
+      console.log('Card ref:', cardRef.current);
 
-      // 2. Small delay to ensure styles and layouts are settled
-      await new Promise(r => setTimeout(r, 300));
+      // Longer delay to ensure all SVG elements and images are rendered
+      await new Promise(r => setTimeout(r, 1500));
 
+      console.log('Calling html2canvas...');
       const canvas = await html2canvas(cardRef.current, {
-        useCORS: true,
         scale: 2, // High quality
         backgroundColor: null, // Transparent to respect CSS background
-        logging: false,
+        logging: true,
       });
 
+      console.log('Canvas created:', canvas);
       const fileName = `${treeName || 'christmas-tree'}-card.png`;
-      const dataUrl = canvas.toDataURL('image/png');
 
-      // 3. Handle Mobile vs Desktop
+      // Use toBlob instead of toDataURL to avoid tainted canvas security error
+      const blob = await new Promise<Blob>((resolve, reject) => {
+        canvas.toBlob((blob) => {
+          if (blob) resolve(blob);
+          else reject(new Error('Failed to create blob'));
+        }, 'image/png');
+      });
+
+      console.log('Blob created, size:', blob.size);
+
+      // Handle Mobile vs Desktop
       // If Web Share API is available and supports file sharing (primarily mobile)
       if (navigator.share && navigator.canShare) {
-        const blob = await (await fetch(dataUrl)).blob();
         const file = new File([blob], fileName, { type: 'image/png' });
 
         if (navigator.canShare({ files: [file] })) {
@@ -231,6 +234,7 @@ function App() {
               title: '나의 크리스마스 트리',
               text: '내가 꾸민 크리스마스 트리를 공유할게요! 🎄',
             });
+            console.log('Share successful');
             return; // Success on mobile
           } catch (err) {
             console.log('Share canceled or failed', err);
@@ -240,16 +244,21 @@ function App() {
       }
 
       // Traditional download fallback (Desktop or simple mobile browser)
+      const url = URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.download = fileName;
-      link.href = dataUrl;
+      link.href = url;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
+      URL.revokeObjectURL(url); // Clean up
+      console.log('Download initiated');
 
     } catch (err) {
       console.error('Error generating card image:', err);
-      alert('이미지 생성 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
+      console.error('Error stack:', err instanceof Error ? err.stack : 'No stack trace');
+      console.error('Error message:', err instanceof Error ? err.message : String(err));
+      alert(`이미지 생성 중 오류가 발생했습니다.\n\n에러: ${err instanceof Error ? err.message : String(err)}\n\n브라우저 콘솔을 확인해주세요.`);
     }
   };
 
@@ -324,7 +333,7 @@ function App() {
                   display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '5px'
                 }}
               >
-                <span>+</span> {ornaments.length >= 36 ? '트리가 꽉찼어요!' : '오너먼트 그리기'}
+                {ornaments.length >= 36 ? '트리가 꽉찼어요!' : '+ 오너먼트 그리기'}
               </button>
 
               <button
@@ -444,7 +453,7 @@ function App() {
       />
       {/* <AdBar /> */}
       {/* Hidden Card Layout for Export - Improved for Compatibility */}
-      <div style={{ position: 'absolute', left: '-9999px', top: '-9999px' }}>
+      <div style={{ position: 'absolute', left: 0, top: 0, transform: 'translate(-10000px, -10000px)' }}>
         <div
           ref={cardRef}
           style={{
@@ -515,7 +524,7 @@ function App() {
             }} />
 
             <div style={{ margin: '0 0 10px 0', position: 'relative', zIndex: 2, display: 'flex', justifyContent: 'center' }}>
-              <ChristmasTree ornaments={ornaments} />
+              <ChristmasTreeCard ornaments={ornaments} />
             </div>
 
             <div style={{ color: 'white', fontSize: '1.4rem', fontWeight: 'bold', marginTop: '-5px', textShadow: '0 2px 10px rgba(0,0,0,0.8)', zIndex: 2, textAlign: 'center' }}>

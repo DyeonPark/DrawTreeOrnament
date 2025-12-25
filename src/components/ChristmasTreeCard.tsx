@@ -1,14 +1,11 @@
 import './ChristmasTree.css';
 
-interface ChristmasTreeProps {
+interface ChristmasTreeCardProps {
     ornaments?: string[]; // array of dataURLs
 }
 
-// Coordinates based on viewBox="0 0 300 400"
-// We need to map the previous 36 positions to this SVG space.
-// Tree dimensions approx: Center 150. Top ~50, Bottom ~350.
+// Same positions as the main tree
 const ORNAMENT_POSITIONS = [
-    // Pick from different layers and sides to spread out early
     { x: 150, y: 70 },   // Top Center
     { x: 90, y: 320 },  // Bottom Left
     { x: 210, y: 320 }, // Bottom Right
@@ -27,25 +24,27 @@ const ORNAMENT_POSITIONS = [
     { x: 140, y: 310 }, { x: 160, y: 310 },
 ];
 
-const ChristmasTree = ({ ornaments = [] }: ChristmasTreeProps) => {
+// This component renders the tree using SVG with embedded images
+// for better compatibility with html2canvas
+const ChristmasTreeCard = ({ ornaments = [] }: ChristmasTreeCardProps) => {
     return (
-        <div className="tree-container">
+        <div style={{ position: 'relative', width: '300px', height: '410px' }}>
             <svg
                 viewBox="0 0 300 410"
-                className="tree-svg"
-                xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink"
+                style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}
+                xmlns="http://www.w3.org/2000/svg"
+                xmlnsXlink="http://www.w3.org/1999/xlink"
             >
-                {/* Defs for Gradients/Filters */}
                 <defs>
-                    <linearGradient id="treeGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <linearGradient id="treeGradientCard" x1="0%" y1="0%" x2="100%" y2="100%">
                         <stop offset="0%" stopColor="#43a047" />
                         <stop offset="100%" stopColor="#1b5e20" />
                     </linearGradient>
-                    <linearGradient id="trunkGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <linearGradient id="trunkGradientCard" x1="0%" y1="0%" x2="100%" y2="0%">
                         <stop offset="0%" stopColor="#795548" />
                         <stop offset="100%" stopColor="#5d4037" />
                     </linearGradient>
-                    <filter id="dropShadow" x="-20%" y="-20%" width="140%" height="140%">
+                    <filter id="dropShadowCard" x="-20%" y="-20%" width="140%" height="140%">
                         <feGaussianBlur in="SourceAlpha" stdDeviation="3" />
                         <feOffset dx="2" dy="4" result="offsetblur" />
                         <feComponentTransfer>
@@ -58,88 +57,70 @@ const ChristmasTree = ({ ornaments = [] }: ChristmasTreeProps) => {
                     </filter>
                 </defs>
 
-                {/* Trunk - 2x Thicker (60) and Longer (120) */}
-                <rect x="120" y="280" width="60" height="120" fill="url(#trunkGradient)" rx="5" />
-
-                {/* 
-            Tree Layers - Rounded Triangles
-            Using stroke-linejoin="round" stroke-width="20" to fake rounded corners on a triangle path?
-            Or creating explicit paths with curves.
-            Let's use stroke-linejoin="round" on a thick path which works well for soft corners.
-            But we need gradients fill.
-            
-            Better: explicit path with quadratic curves (Q).
-            
-            Layer 1 (Bottom): Base width ~220. Height ~150.
-            Layer 2 (Middle): Base width ~180. Height ~140.
-            Layer 3 (Top): Base width ~140. Height ~120.
-          */}
+                {/* Trunk */}
+                <rect x="120" y="280" width="60" height="120" fill="url(#trunkGradientCard)" rx="5" />
 
                 {/* Bottom Layer */}
                 <path
                     d="M50 320 L250 320 L150 180 Z"
-                    fill="url(#treeGradient)"
-                    stroke="url(#treeGradient)"
+                    fill="url(#treeGradientCard)"
+                    stroke="url(#treeGradientCard)"
                     strokeWidth="25"
                     strokeLinejoin="round"
-                    filter="url(#dropShadow)"
+                    filter="url(#dropShadowCard)"
                 />
 
                 {/* Middle Layer */}
                 <path
                     d="M75 230 L225 230 L150 110 Z"
-                    fill="url(#treeGradient)"
-                    stroke="url(#treeGradient)"
+                    fill="url(#treeGradientCard)"
+                    stroke="url(#treeGradientCard)"
                     strokeWidth="25"
                     strokeLinejoin="round"
-                    filter="url(#dropShadow)"
+                    filter="url(#dropShadowCard)"
                 />
 
-                {/* Top Layer - Lowered tip from 40 to 75 (2/3 height) */}
+                {/* Top Layer */}
                 <path
                     d="M100 140 L200 140 L150 75 Z"
-                    fill="url(#treeGradient)"
-                    stroke="url(#treeGradient)"
+                    fill="url(#treeGradientCard)"
+                    stroke="url(#treeGradientCard)"
                     strokeWidth="25"
                     strokeLinejoin="round"
-                    filter="url(#dropShadow)"
+                    filter="url(#dropShadowCard)"
                 />
 
-                {/* Reverted to Emoji Star - Centered perfectly with SVG attributes */}
+                {/* Star */}
                 <text
                     x="150"
                     y="55"
                     fontSize="45"
                     textAnchor="middle"
                     dominantBaseline="central"
-                    filter="url(#dropShadow)"
+                    filter="url(#dropShadowCard)"
                     style={{ userSelect: 'none' }}
                 >
                     ⭐
                 </text>
 
-                {/* Ornaments */}
+                {/* Ornaments as SVG images */}
                 {ornaments.map((src, index) => {
                     const pos = ORNAMENT_POSITIONS[index] || { x: 150, y: 350 };
                     return (
-                        <g key={index} transform={`translate(${pos.x}, ${pos.y})`}>
-                            {/* Removed circle wrapper as per request - showing raw image */}
-                            <image
-                                href={src}
-                                x="-25"
-                                y="-25"
-                                width="50"
-                                height="50"
-                                preserveAspectRatio="xMidYMid meet"
-                                crossOrigin="anonymous"
-                            />
-                        </g>
+                        <image
+                            key={index}
+                            href={src}
+                            x={pos.x - 25}
+                            y={pos.y - 25}
+                            width="50"
+                            height="50"
+                            preserveAspectRatio="xMidYMid meet"
+                        />
                     );
                 })}
-
             </svg>
         </div>
     );
 };
 
-export default ChristmasTree;
+export default ChristmasTreeCard;
