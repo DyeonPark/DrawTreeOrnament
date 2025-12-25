@@ -94,15 +94,29 @@ export async function generateCardImage(ornaments: string[], treeName: string): 
 
     // Draw ornaments
     for (let i = 0; i < ornaments.length && i < ORNAMENT_POSITIONS.length; i++) {
-        const ornamentImg = new Image();
-        await new Promise((resolve) => {
-            ornamentImg.onload = resolve;
-            ornamentImg.onerror = resolve;
-            ornamentImg.src = ornaments[i];
-        });
+        try {
+            const ornamentImg = new Image();
+            ornamentImg.crossOrigin = 'anonymous'; // Enable CORS
 
-        const pos = ORNAMENT_POSITIONS[i];
-        ctx.drawImage(ornamentImg, 105 + pos.x - 25, 100 + pos.y - 25, 50, 50);
+            // Wait for image to load completely
+            const loaded = await new Promise<boolean>((resolve) => {
+                ornamentImg.onload = () => resolve(true);
+                ornamentImg.onerror = () => {
+                    console.error(`Failed to load ornament ${i}`);
+                    resolve(false);
+                };
+                ornamentImg.src = ornaments[i];
+            });
+
+            // Only draw if image loaded successfully
+            if (loaded && ornamentImg.complete && ornamentImg.naturalWidth > 0) {
+                const pos = ORNAMENT_POSITIONS[i];
+                ctx.drawImage(ornamentImg, 105 + pos.x - 25, 100 + pos.y - 25, 50, 50);
+            }
+        } catch (err) {
+            console.error(`Error drawing ornament ${i}:`, err);
+            // Continue with next ornament
+        }
     }
 
     // Draw tree name

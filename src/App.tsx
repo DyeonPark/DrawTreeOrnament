@@ -194,36 +194,15 @@ function App() {
 
 
   const handleDownloadImage = async () => {
-    if (!cardRef.current) return;
     try {
-      console.log('Starting card image generation...');
-      console.log('Card ref:', cardRef.current);
+      console.log('Starting manual card generation...');
 
-      // Longer delay to ensure all SVG elements and images are rendered
-      await new Promise(r => setTimeout(r, 1500));
+      const blob = await generateCardImage(ornaments, treeName);
+      console.log('Card generated, blob size:', blob.size);
 
-      console.log('Calling html2canvas...');
-      const canvas = await html2canvas(cardRef.current, {
-        scale: 2, // High quality
-        backgroundColor: null, // Transparent to respect CSS background
-        logging: true,
-      });
-
-      console.log('Canvas created:', canvas);
       const fileName = `${treeName || 'christmas-tree'}-card.png`;
 
-      // Use toBlob instead of toDataURL to avoid tainted canvas security error
-      const blob = await new Promise<Blob>((resolve, reject) => {
-        canvas.toBlob((blob) => {
-          if (blob) resolve(blob);
-          else reject(new Error('Failed to create blob'));
-        }, 'image/png');
-      });
-
-      console.log('Blob created, size:', blob.size);
-
       // Handle Mobile vs Desktop
-      // If Web Share API is available and supports file sharing (primarily mobile)
       if (navigator.share && navigator.canShare) {
         const file = new File([blob], fileName, { type: 'image/png' });
 
@@ -235,15 +214,14 @@ function App() {
               text: '내가 꾸민 크리스마스 트리를 공유할게요! 🎄',
             });
             console.log('Share successful');
-            return; // Success on mobile
+            return;
           } catch (err) {
             console.log('Share canceled or failed', err);
-            // Fallback to traditional download if share is canceled or fails
           }
         }
       }
 
-      // Traditional download fallback (Desktop or simple mobile browser)
+      // Traditional download fallback
       const url = URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.download = fileName;
@@ -251,7 +229,7 @@ function App() {
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
-      URL.revokeObjectURL(url); // Clean up
+      URL.revokeObjectURL(url);
       console.log('Download initiated');
 
     } catch (err) {
