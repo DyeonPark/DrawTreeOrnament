@@ -92,26 +92,46 @@ export async function generateCardImage(ornaments: string[], treeName: string): 
     ctx.drawImage(treeImg, 105, 100, 300, 410);
     URL.revokeObjectURL(svgUrl);
 
-    // Draw ornaments
+    // Draw ornaments - convert URLs to data URLs first to avoid CORS
     for (let i = 0; i < ornaments.length && i < ORNAMENT_POSITIONS.length; i++) {
         try {
+            let imageSrc = ornaments[i];
+
+            // If it's a URL (not a data URL), fetch and convert to data URL
+            if (!imageSrc.startsWith('data:')) {
+                try {
+                    const response = await fetch(imageSrc);
+                    const blob = await response.blob();
+                    imageSrc = await new Promise<string>((resolve, reject) => {
+                        const reader = new FileReader();
+                        reader.onloadend = () => resolve(reader.result as string);
+                        reader.onerror = reject;
+                        reader.readAsDataURL(blob);
+                    });
+                } catch (fetchErr) {
+                    console.error(`Failed to fetch ornament ${i}:`, fetchErr);
+                    continue; // Skip this ornament
+                }
+            }
+
             const ornamentImg = new Image();
-            ornamentImg.crossOrigin = 'anonymous'; // Enable CORS
 
             // Wait for image to load completely
             const loaded = await new Promise<boolean>((resolve) => {
                 ornamentImg.onload = () => resolve(true);
-                ornamentImg.onerror = () => {
-                    console.error(`Failed to load ornament ${i}`);
+                ornamentImg.onerror = (err) => {
+                    console.error(`Failed to load ornament ${i}:`, err);
                     resolve(false);
                 };
-                ornamentImg.src = ornaments[i];
+                ornamentImg.src = imageSrc;
             });
 
             // Only draw if image loaded successfully
             if (loaded && ornamentImg.complete && ornamentImg.naturalWidth > 0) {
                 const pos = ORNAMENT_POSITIONS[i];
                 ctx.drawImage(ornamentImg, 105 + pos.x - 25, 100 + pos.y - 25, 50, 50);
+            } else {
+                console.warn(`Skipping ornament ${i} - failed to load`);
             }
         } catch (err) {
             console.error(`Error drawing ornament ${i}:`, err);
