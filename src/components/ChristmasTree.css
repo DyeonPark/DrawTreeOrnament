@@ -1,98 +1,38 @@
 .tree-container {
     display: flex;
-    flex-direction: column;
+    justify-content: center;
     align-items: center;
-    position: relative;
-    /* Center in the page */
-    margin: auto;
-    padding-top: 50px;
-    z-index: 1;
-    /* Above snow */
-}
-
-.star {
-    font-size: 3rem;
-    margin-bottom: -20px;
-    z-index: 10;
-    animation: glow 2s infinite alternate;
-    text-shadow: 0 0 10px #ffd700;
-}
-
-@keyframes glow {
-    from {
-        transform: scale(1);
-        opacity: 0.9;
-    }
-
-    to {
-        transform: scale(1.1);
-        opacity: 1;
-    }
-}
-
-.tree-layer {
-    background: linear-gradient(135deg, #4bd676 0%, #2ecc71 100%);
-    border-radius: 15px;
-    transform: rotate(45deg);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
-    position: relative;
-}
-
-.tree-layer.top {
-    width: 100px;
-    height: 100px;
-    z-index: 3;
-}
-
-.tree-layer.middle {
-    width: 140px;
-    height: 140px;
-    margin-top: -60px;
-    /* Overlap */
-    z-index: 2;
-    background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
-}
-
-.tree-layer.bottom {
-    width: 180px;
-    height: 180px;
-    margin-top: -80px;
-    z-index: 1;
-    background: linear-gradient(135deg, #27ae60 0%, #1e8449 100%);
-}
-
-.trunk {
-    width: 50px;
-    height: 60px;
-    background: linear-gradient(to right, #795548, #5d4037);
-    border-radius: 0 0 10px 10px;
-    margin-top: -50px;
-    /* Tuck under bottom layer */
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-}
-
-.ornaments-layer {
-    position: absolute;
-    top: 50px;
-    /* Match tree-container padding */
-    left: 0;
     width: 100%;
     height: 100%;
-    z-index: 5;
-    pointer-events: none;
-    display: flex;
-    justify-content: center;
-    /* Center align items so marginLeft works from center */
-    align-items: flex-start;
+    /* No relative/absolute positioning hacks needed for layers, SVG handles it */
+    transform: scale(1.0);
 }
 
-.ornament-item {
-    position: absolute;
-    width: 35px;
-    height: 35px;
-    transform: translate(-50%, -50%);
-    filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.3));
-    /* Make them look like hanging items? Circle crop? */
-    /* Usually ornaments are circles, but user might draw anything. */
-    /* If user draws arbitrary shape, transparent bg is key. */
+.tree-svg {
+    width: 100%;
+    height: 100%;
+    max-width: 350px;
+    max-height: 500px;
+    /* Ensure it handles events if needed, but current interactions are handled by App/overlay */
+}
+
+/* Animations if any needed inside SVG, can be done with CSS too */
+text {
+    animation: pulse 2s infinite ease-in-out;
+    transform-box: fill-box;
+    transform-origin: center;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.1);
+    }
+
+    100% {
+        transform: scale(1);
+    }
 }

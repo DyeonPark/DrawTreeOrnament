@@ -1,0 +1,103 @@
+.landing-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 20px;
+    text-align: center;
+    color: white;
+    z-index: 10;
+    position: relative;
+    width: 100%;
+}
+
+.landing-header {
+    margin-bottom: 40px;
+}
+
+.landing-title {
+    font-size: 1.5rem;
+    margin: 10px 0;
+    font-weight: bold;
+}
+
+.landing-subtitle {
+    font-size: 0.9rem;
+    color: #ccc;
+    line-height: 1.5;
+}
+
+.card-container {
+    display: flex;
+    flex-direction: row;
+    gap: 15px;
+    width: 100%;
+    max-width: 400px;
+    margin-bottom: 40px;
+}
+
+.card {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 15px;
+    padding: 20px 10px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.card-icon {
+    font-size: 3rem;
+    margin-bottom: 10px;
+}
+
+.card h2 {
+    font-size: 1rem;
+    margin: 0 0 10px 0;
+}
+
+.card p {
+    font-size: 0.7rem;
+    color: #ddd;
+    margin-bottom: 15px;
+    height: 30px;
+    /* fixed height for alignment */
+}
+
+.btn-start,
+.btn-view {
+    width: 100%;
+    padding: 8px;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+.btn-start {
+    background-color: #2ecc71;
+    /* Green */
+    color: white;
+}
+
+.btn-view {
+    background-color: #9b59b6;
+    /* Purple */
+    color: white;
+}
+
+.landing-footer {
+    font-size: 0.7rem;
+    color: #aaa;
+}
+
+@media (max-width: 360px) {
+    .card-container {
+        flex-direction: column;
+    }
+}

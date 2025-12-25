@@ -1,11 +1,15 @@
 import { useState } from 'react';
-import html2canvas from 'html2canvas'; // Import
+import html2canvas from 'html2canvas';
 import MobileWrapper from './components/MobileWrapper'
 import SnowBackground from './components/SnowBackground'
 import ChristmasTree from './components/ChristmasTree'
 import DrawingModal from './components/DrawingModal'
+import LandingPage from './components/LandingPage'
+
+type ViewState = 'landing' | 'tree';
 
 function App() {
+  const [view, setView] = useState<ViewState>('landing');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [ornaments, setOrnaments] = useState<string[]>([]);
 
@@ -62,67 +66,87 @@ function App() {
   return (
     <MobileWrapper>
       <SnowBackground />
-      <div style={{ position: 'relative', zIndex: 1, width: '100%', height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-        <h1 style={{ color: 'white', marginTop: '20px', textShadow: '0 2px 4px rgba(0,0,0,0.5)' }}>DrawTreeOnment</h1>
 
-        <ChristmasTree ornaments={ornaments} />
+      {view === 'landing' ? (
+        <LandingPage onStart={() => setView('tree')} />
+      ) : (
+        /* Tree View */
+        <div style={{ position: 'relative', zIndex: 1, width: '100%', height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
 
-        <div style={{ marginTop: '20px', textAlign: 'center' }} className="no-share">
-          <button
-            onClick={() => setIsModalOpen(true)}
-            disabled={ornaments.length >= 36}
-            style={{
-              padding: '12px 24px',
-              fontSize: '1.1rem',
-              borderRadius: '30px',
-              border: 'none',
-              background: ornaments.length >= 36 ? '#ccc' : '#ff3b30',
-              color: 'white',
-              fontWeight: 'bold',
-              boxShadow: '0 4px 10px rgba(0,0,0,0.3)',
-              cursor: ornaments.length >= 36 ? 'not-allowed' : 'pointer'
-            }}
-          >
-            {ornaments.length >= 36 ? 'Tree Full!' : '오너먼트 그리기'}
-          </button>
-          <p style={{ color: '#aaa', fontSize: '0.8rem', marginTop: '5px' }}>{ornaments.length} / 36</p>
+          {/* Header: Back Button & Title */}
+          <div style={{ width: '100%', padding: '15px 20px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-start', marginBottom: '10px' }}>
+              <button
+                onClick={() => setView('landing')}
+                style={{ background: 'rgba(255,255,255,0.2)', border: 'none', color: 'white', padding: '5px 12px', borderRadius: '15px', cursor: 'pointer', fontSize: '0.8rem', backdropFilter: 'blur(5px)' }}
+              >
+                ← 뒤로가기
+              </button>
+            </div>
+            <div style={{ textAlign: 'center' }}>
+              <div style={{ fontSize: '0.9rem', color: '#aaa', marginBottom: '5px' }}>🎄 우리의 크리스마스 트리</div>
+              <div style={{ fontSize: '1.2rem', color: 'white', fontWeight: 'bold' }}>친구들과 함께 오너먼트를 그려보세요!</div>
+            </div>
+          </div>
+
+          <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%' }}>
+            <ChristmasTree ornaments={ornaments} />
+          </div>
+
+          {/* Bottom Controls */}
+          <div style={{ width: '100%', padding: '20px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '15px', paddingBottom: '30px' }} className="no-share">
+            <div style={{ display: 'flex', gap: '10px', width: '100%', justifyContent: 'center' }}>
+              <button
+                onClick={() => setIsModalOpen(true)}
+                disabled={ornaments.length >= 36}
+                style={{
+                  flex: 1,
+                  padding: '12px',
+                  borderRadius: '10px',
+                  border: 'none',
+                  background: ornaments.length >= 36 ? '#ccc' : '#2ecc71',
+                  color: 'white',
+                  fontWeight: 'bold',
+                  boxShadow: '0 4px 10px rgba(0,0,0,0.3)',
+                  cursor: ornaments.length >= 36 ? 'not-allowed' : 'pointer',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '5px'
+                }}
+              >
+                <span>+</span> {ornaments.length >= 36 ? 'Full' : '오너먼트 그리기'}
+              </button>
+
+              <button
+                onClick={handleShare}
+                style={{
+                  flex: 1,
+                  padding: '12px',
+                  borderRadius: '10px',
+                  border: 'none',
+                  background: '#3498db',
+                  color: 'white',
+                  fontWeight: 'bold',
+                  boxShadow: '0 4px 10px rgba(0,0,0,0.3)',
+                  cursor: 'pointer',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '5px'
+                }}
+              >
+                🔗 친구 초대
+              </button>
+            </div>
+            <div style={{ color: '#aaa', fontSize: '0.8rem' }}>
+              총 {ornaments.length}개의 오너먼트가 달렸어요 ✨
+            </div>
+          </div>
+
+          <DrawingModal
+            isOpen={isModalOpen}
+            onClose={() => setIsModalOpen(false)}
+            onSave={handleSaveOrnament}
+          />
         </div>
-
-        <button
-          className="no-share"
-          onClick={handleShare}
-          style={{
-            position: 'absolute',
-            bottom: '20px',
-            right: '20px',
-            width: '50px',
-            height: '50px',
-            borderRadius: '50%',
-            border: 'none',
-            background: 'white',
-            color: '#333',
-            fontSize: '1.5rem',
-            boxShadow: '0 4px 10px rgba(0,0,0,0.3)',
-            cursor: 'pointer',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            zIndex: 100
-          }}
-          title="Share"
-        >
-          🔗
-        </button>
-      </div>
-
-      <DrawingModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        onSave={handleSaveOrnament}
-      />
+      )}
     </MobileWrapper>
   )
 }
 
 export default App
-

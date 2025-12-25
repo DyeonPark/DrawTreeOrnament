@@ -2,127 +2,175 @@
     position: fixed;
     top: 0;
     left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.8);
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 2000;
     display: flex;
-    align-items: center;
     justify-content: center;
-    z-index: 1000;
+    align-items: center;
 }
 
 .modal-content {
     background: white;
     width: 90%;
     max-width: 400px;
-    border-radius: 20px;
-    overflow: hidden;
+    height: auto;
+    max-height: 90vh;
+    border-radius: 12px;
     display: flex;
     flex-direction: column;
-    height: 80vh;
-}
-
-.canvas-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 20px;
-    background: #f5f5f5;
-    border-bottom: 1px solid #ddd;
-}
-
-.canvas-header h3 {
-    margin: 0;
-    font-size: 1.2rem;
-    color: #333;
-}
-
-.close-btn,
-.save-btn {
-    border: none;
-    background: none;
-    font-weight: bold;
-    font-size: 1rem;
-    cursor: pointer;
-}
-
-.close-btn {
-    color: #ff3b30;
-}
-
-.save-btn {
-    color: #007aff;
-}
-
-.canvas-container {
-    flex: 1;
-    background: #fff;
-    /* Transparent in final logic if ornaments don't need bg? But canvas usually white or transparent. Requirement: "기본적으로 배경색은 없습니다" -> Transparent background */
-    /* If transparent, how to see white brush? */
-    /* We should show a checkerboard or light gray for neutral, but save transparent. */
-    background-image:
-        linear-gradient(45deg, #eee 25%, transparent 25%),
-        linear-gradient(-45deg, #eee 25%, transparent 25%),
-        linear-gradient(45deg, transparent 75%, #eee 75%),
-        linear-gradient(-45deg, transparent 75%, #eee 75%);
-    background-size: 20px 20px;
-    background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
-    position: relative;
     overflow: hidden;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+.modal-header {
+    padding: 15px;
+    border-bottom: 1px solid #eee;
+}
+
+.modal-header h3 {
+    margin: 0;
+    font-size: 1.1rem;
+    color: #333;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.canvas-wrapper {
+    width: 100%;
+    aspect-ratio: 1;
+    /* Square canvas */
+    background: #f9f9f9;
+    position: relative;
+    border-bottom: 1px solid #eee;
 }
 
 canvas {
     width: 100%;
     height: 100%;
     touch-action: none;
-    /* Prevent scrolling */
+    cursor: crosshair;
 }
 
-.tools-panel {
+.tools-section {
     padding: 15px;
-    background: #f5f5f5;
-    border-top: 1px solid #ddd;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
 }
 
-.colors {
+/* Colors */
+.color-picker {
     display: flex;
     gap: 10px;
     overflow-x: auto;
-    padding-bottom: 10px;
-    -webkit-overflow-scrolling: touch;
+    padding-bottom: 5px;
+    align-items: center;
+    scrollbar-width: none;
+    /* Hide scrollbar */
 }
 
-.color-swatch {
-    width: 30px;
-    height: 30px;
+.color-picker::-webkit-scrollbar {
+    display: none;
+}
+
+.color-btn {
+    width: 32px;
+    height: 32px;
     border-radius: 50%;
-    border: 2px solid white;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    border: 2px solid #ddd;
     flex-shrink: 0;
     cursor: pointer;
+    transition: transform 0.1s;
 }
 
-.color-swatch.selected {
+.color-btn.active {
+    transform: scale(1.2);
     border-color: #333;
-    transform: scale(1.1);
+    box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
 }
 
-.sizes {
+/* Size Slider */
+.size-slider-container {
     display: flex;
     align-items: center;
-    gap: 15px;
-    margin-top: 10px;
-    justify-content: center;
+    width: 100%;
 }
 
-.size-btn {
-    background: #333;
+.size-slider {
+    flex: 1;
+    -webkit-appearance: none;
+    height: 4px;
+    background: #ddd;
+    border-radius: 2px;
+    outline: none;
+}
+
+.size-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 16px;
+    height: 16px;
+    background: #007aff;
     border-radius: 50%;
-    border: 2px solid transparent;
     cursor: pointer;
 }
 
-.size-btn.selected {
-    border-color: #007aff;
-    background: #000;
+/* Action Buttons */
+.action-row {
+    display: flex;
+    gap: 10px;
+}
+
+.tool-btn {
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    background: white;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    flex: 1;
+    white-space: nowrap;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #333;
+}
+
+.tool-btn.active {
+    background: #eee;
+    border-color: #999;
+    font-weight: bold;
+}
+
+/* Footer Buttons */
+.modal-footer {
+    display: flex;
+    gap: 10px;
+    margin-top: 5px;
+}
+
+.btn-save {
+    flex: 2;
+    background: #2ecc71;
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.btn-cancel {
+    flex: 1;
+    background: #f1f2f6;
+    color: #333;
+    border: none;
+    padding: 12px;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 1rem;
+    cursor: pointer;
 }
