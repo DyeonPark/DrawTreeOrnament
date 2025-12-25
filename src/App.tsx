@@ -194,20 +194,62 @@ function App() {
   const handleDownloadImage = async () => {
     if (!cardRef.current) return;
     try {
-      // Small delay to ensure rendering
-      await new Promise(r => setTimeout(r, 100));
+      // 1. Ensure all images within the card are loaded
+      const images = cardRef.current.querySelectorAll('img');
+      const loadPromises = Array.from(images).map(img => {
+        if (img.complete) return Promise.resolve();
+        return new Promise((resolve, reject) => {
+          img.onload = resolve;
+          img.onerror = reject;
+        });
+      });
+      await Promise.all(loadPromises);
+
+      // 2. Small delay to ensure styles and layouts are settled
+      await new Promise(r => setTimeout(r, 300));
+
       const canvas = await html2canvas(cardRef.current, {
         useCORS: true,
         scale: 2, // High quality
-        backgroundColor: '#0a192f', // Match background
+        backgroundColor: null, // Transparent to respect CSS background
+        logging: false,
       });
+
+      const fileName = `${treeName || 'christmas-tree'}-card.png`;
+      const dataUrl = canvas.toDataURL('image/png');
+
+      // 3. Handle Mobile vs Desktop
+      // If Web Share API is available and supports file sharing (primarily mobile)
+      if (navigator.share && navigator.canShare) {
+        const blob = await (await fetch(dataUrl)).blob();
+        const file = new File([blob], fileName, { type: 'image/png' });
+
+        if (navigator.canShare({ files: [file] })) {
+          try {
+            await navigator.share({
+              files: [file],
+              title: '나의 크리스마스 트리',
+              text: '내가 꾸민 크리스마스 트리를 공유할게요! 🎄',
+            });
+            return; // Success on mobile
+          } catch (err) {
+            console.log('Share canceled or failed', err);
+            // Fallback to traditional download if share is canceled or fails
+          }
+        }
+      }
+
+      // Traditional download fallback (Desktop or simple mobile browser)
       const link = document.createElement('a');
-      link.download = `${treeName || 'christmas-tree'}-card.png`;
-      link.href = canvas.toDataURL('image/png');
+      link.download = fileName;
+      link.href = dataUrl;
+      document.body.appendChild(link);
       link.click();
+      document.body.removeChild(link);
+
     } catch (err) {
       console.error('Error generating card image:', err);
-      alert('이미지 저장 중 오류가 발생했습니다.');
+      alert('이미지 생성 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
     }
   };
 
@@ -407,48 +449,45 @@ function App() {
         <div
           ref={cardRef}
           style={{
-            width: '400px',
+            width: '450px',
             background: '#0a192f',
-            padding: '30px',
+            padding: '40px',
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
             position: 'relative',
-            border: '10px solid #c0392b', // Red border
-            borderRadius: '20px'
+            // Candy Cane Border
+            border: '15px solid transparent',
+            borderImageSource: 'repeating-linear-gradient(45deg, #c0392b, #c0392b 20px, #ffffff 20px, #ffffff 40px)',
+            borderImageSlice: 15,
+            overflow: 'hidden'
           }}
         >
-          {/* Top Border Pattern */}
+          {/* CSS Snowing Effect for Card captures */}
           <div style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
             width: '100%',
-            height: '20px',
-            background: 'repeating-linear-gradient(45deg, #27ae60, #27ae60 10px, #2ecc71 10px, #2ecc71 20px)',
-            marginBottom: '20px',
-            borderRadius: '10px'
+            height: '100%',
+            pointerEvents: 'none',
+            background: 'radial-gradient(circle at 20% 30%, rgba(255,255,255,0.2) 1.5px, transparent 1.5px), radial-gradient(circle at 70% 60%, rgba(255,255,255,0.2) 1.5px, transparent 1.5px), radial-gradient(circle at 40% 80%, rgba(255,255,255,0.2) 2px, transparent 2px), radial-gradient(circle at 85% 25%, rgba(255,255,255,0.2) 1.2px, transparent 1.2px), radial-gradient(circle at 15% 75%, rgba(255,255,255,0.2) 1.5px, transparent 1.5px)',
+            backgroundSize: '150px 150px'
           }} />
 
-          <div style={{ color: 'white', fontSize: '1.5rem', fontWeight: 'bold', marginBottom: '20px' }}>
-            Merry Christmas 🎄
+          <div style={{ margin: '20px 0', position: 'relative' }}>
+            <ChristmasTree ornaments={ornaments} />
           </div>
 
-          <ChristmasTree ornaments={ornaments} />
-
-          <div style={{ color: '#f1c40f', fontSize: '1.2rem', fontWeight: 'bold', marginTop: '30px' }}>
+          <div style={{ color: 'white', fontSize: '1.4rem', fontWeight: 'bold', marginTop: '10px', textShadow: '0 2px 4px rgba(0,0,0,0.5)' }}>
             {treeName || '우리들의 크리스마스'}
           </div>
 
-          <div style={{ color: '#aaa', fontSize: '0.8rem', marginTop: '10px' }}>
-            Draw Tree-Onment 🌲
-          </div>
+          <div style={{ width: '80%', height: '1px', background: 'rgba(255,255,255,0.2)', margin: '25px 0' }} />
 
-          {/* Bottom Border Pattern */}
-          <div style={{
-            width: '100%',
-            height: '20px',
-            background: 'repeating-linear-gradient(45deg, #27ae60, #27ae60 10px, #2ecc71 10px, #2ecc71 20px)',
-            marginTop: '20px',
-            borderRadius: '10px'
-          }} />
+          <div style={{ color: 'rgba(255,255,255,0.5)', fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '5px' }}>
+            draw-tree-onment.vercel.app 🌲
+          </div>
         </div>
       </div>
 

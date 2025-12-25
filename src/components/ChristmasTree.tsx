@@ -105,8 +105,8 @@ const ChristmasTree = ({ ornaments = [] }: ChristmasTreeProps) => {
                     filter="url(#dropShadow)"
                 />
 
-                {/* Star at Top - Adjusted y from 45 to 70 */}
-                <text x="150" y="70" fontSize="40" textAnchor="middle" filter="url(#dropShadow)">⭐</text>
+                {/* Star at Top - Adjusted y from 70 to 60 and added dominant-baseline */}
+                <text x="150" y="60" fontSize="45" textAnchor="middle" dominantBaseline="middle" filter="url(#dropShadow)">⭐</text>
 
                 {/* Ornaments */}
                 {ornaments.map((src, index) => {
