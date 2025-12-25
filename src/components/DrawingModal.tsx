@@ -13,7 +13,7 @@ const COLORS = ['#FF0000', '#FFA500', '#FFFF00', '#008000', '#0000FF', '#4B0082'
 const DrawingModal = ({ isOpen, onClose, onSave }: DrawingModalProps) => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const [color, setColor] = useState('#FF0000');
-    const [size, setSize] = useState(5);
+    const [size, setSize] = useState(15);
     const [isDrawing, setIsDrawing] = useState(false);
     const [mode, setMode] = useState<'brush' | 'eraser' | 'fill'>('brush');
 
@@ -38,7 +38,7 @@ const DrawingModal = ({ isOpen, onClose, onSave }: DrawingModalProps) => {
 
                 // Reset State
                 setColor('#FF0000');
-                setSize(5);
+                setSize(15);
                 setMode('brush');
             }
         }
