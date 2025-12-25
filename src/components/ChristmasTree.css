@@ -70,3 +70,29 @@
     /* Tuck under bottom layer */
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
 }
+
+.ornaments-layer {
+    position: absolute;
+    top: 50px;
+    /* Match tree-container padding */
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 5;
+    pointer-events: none;
+    display: flex;
+    justify-content: center;
+    /* Center align items so marginLeft works from center */
+    align-items: flex-start;
+}
+
+.ornament-item {
+    position: absolute;
+    width: 35px;
+    height: 35px;
+    transform: translate(-50%, -50%);
+    filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.3));
+    /* Make them look like hanging items? Circle crop? */
+    /* Usually ornaments are circles, but user might draw anything. */
+    /* If user draws arbitrary shape, transparent bg is key. */
+}
