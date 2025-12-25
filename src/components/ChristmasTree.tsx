@@ -126,6 +126,8 @@ const ChristmasTree = ({ ornaments = [] }: ChristmasTreeProps) => {
                             {/* Removed circle wrapper as per request - showing raw image */}
                             <image
                                 href={src}
+                                xlinkHref={src}
+                                crossOrigin="anonymous"
                                 x="-25"
                                 y="-25"
                                 width="50"
