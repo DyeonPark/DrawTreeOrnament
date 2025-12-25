@@ -1,0 +1,94 @@
+.explore-container {
+    padding: 20px;
+    width: 100%;
+    color: white;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.explore-header {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+}
+
+.explore-header h2 {
+    margin: 0;
+    font-size: 1.4rem;
+}
+
+.back-btn {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    color: white;
+    padding: 6px 12px;
+    border-radius: 15px;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+.tree-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(3, auto);
+    gap: 15px;
+    flex: 1;
+}
+
+.tree-card {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    transition: transform 0.2s, background 0.2s;
+    backdrop-filter: blur(5px);
+}
+
+.tree-card:hover {
+    transform: scale(1.05);
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.tree-preview {
+    width: 100%;
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3rem;
+    margin-bottom: 10px;
+}
+
+.tree-preview img {
+    width: 80%;
+    height: 80%;
+    object-fit: contain;
+}
+
+.tree-info {
+    text-align: center;
+}
+
+.tree-name {
+    font-size: 0.9rem;
+    font-weight: bold;
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 120px;
+}
+
+.loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    font-size: 1.2rem;
+}

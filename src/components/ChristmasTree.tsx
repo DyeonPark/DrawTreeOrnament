@@ -8,21 +8,23 @@ interface ChristmasTreeProps {
 // We need to map the previous 36 positions to this SVG space.
 // Tree dimensions approx: Center 150. Top ~50, Bottom ~350.
 const ORNAMENT_POSITIONS = [
-    // Top Layer (Triangle ~ 150,50 to 100,120 / 200,120)
-    { x: 150, y: 70 }, { x: 135, y: 90 }, { x: 165, y: 90 },
-    { x: 125, y: 110 }, { x: 150, y: 110 }, { x: 175, y: 110 },
-
-    // Middle Layer (Triangle ~ 150,80 to 80,220 / 220,220)
-    { x: 110, y: 140 }, { x: 190, y: 140 }, { x: 130, y: 160 }, { x: 170, y: 160 },
+    // Pick from different layers and sides to spread out early
+    { x: 150, y: 70 },   // Top Center
+    { x: 90, y: 320 },  // Bottom Left
+    { x: 210, y: 320 }, // Bottom Right
+    { x: 190, y: 140 }, // Middle Right
+    { x: 110, y: 140 }, // Middle Left
+    { x: 150, y: 250 }, // Bottom Center
+    { x: 135, y: 90 },  // Top-ish Left
+    { x: 165, y: 90 },  // Top-ish Right
+    { x: 125, y: 110 }, { x: 175, y: 110 },
+    { x: 150, y: 110 }, { x: 130, y: 160 }, { x: 170, y: 160 },
     { x: 100, y: 180 }, { x: 200, y: 180 }, { x: 120, y: 190 }, { x: 180, y: 190 },
     { x: 150, y: 170 }, { x: 90, y: 200 }, { x: 210, y: 200 },
-
-    // Bottom Layer (Triangle ~ 150,180 to 50,350 / 250,350)
     { x: 110, y: 230 }, { x: 190, y: 230 }, { x: 80, y: 240 }, { x: 220, y: 240 },
     { x: 130, y: 260 }, { x: 170, y: 260 }, { x: 100, y: 270 }, { x: 200, y: 270 },
-    { x: 150, y: 250 }, { x: 120, y: 290 }, { x: 180, y: 290 },
-    { x: 70, y: 300 }, { x: 230, y: 300 }, { x: 140, y: 310 }, { x: 160, y: 310 },
-    { x: 90, y: 320 }, { x: 210, y: 320 },
+    { x: 120, y: 290 }, { x: 180, y: 290 }, { x: 70, y: 300 }, { x: 230, y: 300 },
+    { x: 140, y: 310 }, { x: 160, y: 310 },
 ];
 
 const ChristmasTree = ({ ornaments = [] }: ChristmasTreeProps) => {

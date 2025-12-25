@@ -17,9 +17,29 @@
 }
 
 .landing-title {
-    font-size: 1.5rem;
+    font-size: 1.8rem;
     margin: 10px 0;
     font-weight: bold;
+}
+
+.tree-icon {
+    font-size: 6rem;
+    display: block;
+    margin-bottom: 10px;
+    filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.3));
+    animation: sway 3s ease-in-out infinite;
+}
+
+@keyframes sway {
+
+    0%,
+    100% {
+        transform: rotate(-3deg);
+    }
+
+    50% {
+        transform: rotate(3deg);
+    }
 }
 
 .landing-subtitle {
@@ -80,9 +100,18 @@
 }
 
 .btn-start {
-    background-color: #2ecc71;
-    /* Green */
+    background: linear-gradient(135deg, #2ecc71, #27ae60);
     color: white;
+    max-width: 250px;
+    padding: 15px 30px;
+    font-size: 1.1rem;
+    box-shadow: 0 4px 15px rgba(46, 204, 113, 0.4);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.btn-start:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(46, 204, 113, 0.5);
 }
 
 .btn-view {
