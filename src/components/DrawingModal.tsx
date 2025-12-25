@@ -8,7 +8,7 @@ interface DrawingModalProps {
 }
 
 const COLORS = ['#FF0000', '#FFA500', '#FFFF00', '#008000', '#0000FF', '#4B0082', '#EE82EE', '#000000', '#FFFFFF', '#8B4513'];
-const BRUSH_SIZES = [2, 5, 10, 20]; // This array is no longer directly used for rendering, but the concept of size remains.
+// const BRUSH_SIZES = [2, 5, 10, 20]; // Removed unused
 
 const DrawingModal = ({ isOpen, onClose, onSave }: DrawingModalProps) => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -30,9 +30,8 @@ const DrawingModal = ({ isOpen, onClose, onSave }: DrawingModalProps) => {
                 canvas.height = rect.height * dpr;
                 ctx.scale(dpr, dpr);
 
-                // Set default white background
-                ctx.fillStyle = '#FFFFFF';
-                ctx.fillRect(0, 0, rect.width, rect.height);
+                // Set default to transparent (no white background)
+                ctx.clearRect(0, 0, rect.width, rect.height);
 
                 ctx.lineCap = 'round';
                 ctx.lineJoin = 'round';
@@ -87,12 +86,25 @@ const DrawingModal = ({ isOpen, onClose, onSave }: DrawingModalProps) => {
         const y = clientY - rect.top;
 
         // Brush Logic
-        ctx.strokeStyle = mode === 'eraser' ? '#FFFFFF' : color;
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+
+        if (mode === 'eraser') {
+            ctx.globalCompositeOperation = 'destination-out';
+            ctx.strokeStyle = 'rgba(0,0,0,1)'; // Color doesn't matter for destination-out, alpha does
+        } else {
+            ctx.globalCompositeOperation = 'source-over';
+            ctx.strokeStyle = color;
+        }
+
         ctx.lineWidth = size;
         ctx.lineTo(x, y);
         ctx.stroke();
         ctx.beginPath();
         ctx.moveTo(x, y);
+
+        // Reset to default
+        ctx.globalCompositeOperation = 'source-over';
     };
 
     const handleFill = (e: React.MouseEvent | React.TouchEvent) => {
@@ -142,13 +154,9 @@ const DrawingModal = ({ isOpen, onClose, onSave }: DrawingModalProps) => {
         const r = parseInt(color.slice(1, 3), 16);
         const g = parseInt(color.slice(3, 5), 16);
         const b = parseInt(color.slice(5, 7), 16);
-        const fillColor = { r, g, b, a: 255 };
-
         // If target same as fill, return
         if (targetColor.r === r && targetColor.g === g && targetColor.b === b) return;
 
-        const queue = [[startX, startY]];
-        const visited = new Set(); // To prevent infinite loops if logic buggy, though standard algo doesn't need if conditions met
         // Using Int32Array for queue might be faster but Array is fine for MVP.
 
         const matchColor = (pos: number) => {
@@ -192,9 +200,8 @@ const DrawingModal = ({ isOpen, onClose, onSave }: DrawingModalProps) => {
         if (!canvas) return;
         const ctx = canvas.getContext('2d');
         if (!ctx) return;
-        // Clear to White
-        ctx.fillStyle = '#FFFFFF';
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        // Clear to Transparent
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
     };
 
     const handleSave = () => {

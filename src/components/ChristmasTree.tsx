@@ -111,15 +111,15 @@ const ChristmasTree = ({ ornaments = [] }: ChristmasTreeProps) => {
                     const pos = ORNAMENT_POSITIONS[index] || { x: 150, y: 350 };
                     return (
                         <g key={index} transform={`translate(${pos.x}, ${pos.y})`}>
-                            <circle r="20" fill="white" stroke="white" strokeWidth="2" filter="url(#dropShadow)" />
+                            {/* Removed circle wrapper as per request - showing raw image */}
                             <image
                                 href={src}
-                                x="-20"
-                                y="-20"
-                                width="40"
-                                height="40"
-                                preserveAspectRatio="xMidYMid slice"
-                                style={{ clipPath: 'circle(20px at 20px 20px)' }}
+                                x="-25"
+                                y="-25"
+                                width="50"
+                                height="50"
+                                preserveAspectRatio="xMidYMid meet"
+                                style={{ filter: 'drop-shadow(0 2px 3px rgba(0,0,0,0.3))' }}
                             />
                         </g>
                     );
