@@ -443,49 +443,90 @@ function App() {
         onCreate={handleCreateTree}
       />
       <AdBar />
-      {/* Hidden Card Layout for Export */}
+      {/* Hidden Card Layout for Export - Improved for Compatibility */}
       <div style={{ position: 'absolute', left: '-9999px', top: '-9999px' }}>
         <div
           ref={cardRef}
           style={{
             width: '450px',
-            background: '#0a192f',
-            padding: '40px',
+            background: '#c0392b', // Base Red for Candy Cane
+            padding: '20px', // Thickness of the border
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
             position: 'relative',
-            // Candy Cane Border
-            border: '15px solid transparent',
-            borderImageSource: 'repeating-linear-gradient(45deg, #c0392b, #c0392b 20px, #ffffff 20px, #ffffff 40px)',
-            borderImageSlice: 15,
             overflow: 'hidden'
           }}
         >
-          {/* CSS Snowing Effect for Card captures */}
+          {/* Candy Cane Stripes */}
+          {[...Array(30)].map((_, i) => (
+            <div key={`stripe-${i}`} style={{
+              position: 'absolute',
+              top: '-150px',
+              left: `${(i - 10) * 40}px`,
+              width: '25px',
+              height: '800px',
+              backgroundColor: 'white',
+              transform: 'rotate(45deg)',
+              pointerEvents: 'none',
+              zIndex: 0
+            }} />
+          ))}
+
+          {/* Inner Content Wrapper */}
           <div style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
             width: '100%',
-            height: '100%',
-            pointerEvents: 'none',
-            background: 'radial-gradient(circle at 20% 30%, rgba(255,255,255,0.2) 1.5px, transparent 1.5px), radial-gradient(circle at 70% 60%, rgba(255,255,255,0.2) 1.5px, transparent 1.5px), radial-gradient(circle at 40% 80%, rgba(255,255,255,0.2) 2px, transparent 2px), radial-gradient(circle at 85% 25%, rgba(255,255,255,0.2) 1.2px, transparent 1.2px), radial-gradient(circle at 15% 75%, rgba(255,255,255,0.2) 1.5px, transparent 1.5px)',
-            backgroundSize: '150px 150px'
-          }} />
+            background: '#0a192f',
+            padding: '25px 20px',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            position: 'relative',
+            zIndex: 1,
+            overflow: 'hidden',
+            borderRadius: '5px' // Slight rounding inside the border
+          }}>
+            {/* Snowfall Particles (Individual Divs for guaranteed capture) */}
+            {[...Array(60)].map((_, i) => (
+              <div key={`snow-${i}`} style={{
+                position: 'absolute',
+                left: `${(i * 1.67) % 100}%`,
+                top: `${(i * 13.3) % 100}%`,
+                width: i % 3 === 0 ? '3px' : '2px',
+                height: i % 3 === 0 ? '3px' : '2px',
+                backgroundColor: 'white',
+                borderRadius: '50%',
+                opacity: 0.6,
+                zIndex: 0
+              }} />
+            ))}
 
-          <div style={{ margin: '20px 0', position: 'relative' }}>
-            <ChristmasTree ornaments={ornaments} />
-          </div>
+            {/* Silver/White Glow effect behind the tree */}
+            <div style={{
+              position: 'absolute',
+              top: '40%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)',
+              width: '320px',
+              height: '320px',
+              background: 'radial-gradient(circle, rgba(255, 255, 255, 0.25) 0%, transparent 70%)',
+              pointerEvents: 'none',
+              zIndex: 0
+            }} />
 
-          <div style={{ color: 'white', fontSize: '1.4rem', fontWeight: 'bold', marginTop: '10px', textShadow: '0 2px 4px rgba(0,0,0,0.5)' }}>
-            {treeName || '우리들의 크리스마스'}
-          </div>
+            <div style={{ margin: '0 0 -5px 0', position: 'relative', zIndex: 2, display: 'flex', justifyContent: 'center' }}>
+              <ChristmasTree ornaments={ornaments} />
+            </div>
 
-          <div style={{ width: '80%', height: '1px', background: 'rgba(255,255,255,0.2)', margin: '25px 0' }} />
+            <div style={{ color: 'white', fontSize: '1.4rem', fontWeight: 'bold', marginTop: '0', textShadow: '0 2px 10px rgba(0,0,0,0.8)', zIndex: 2, textAlign: 'center' }}>
+              {treeName || '우리들의 크리스마스'}
+            </div>
 
-          <div style={{ color: 'rgba(255,255,255,0.5)', fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '5px' }}>
-            draw-tree-ornament.vercel.app 🌲
+            <div style={{ width: '60%', height: '1px', background: 'rgba(255,255,255,0.3)', margin: '15px 0', zIndex: 2 }} />
+
+            <div style={{ color: 'rgba(255,255,255,0.6)', fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '5px', zIndex: 2, fontWeight: '500' }}>
+              draw-tree-ornament.vercel.app 🎄
+            </div>
           </div>
         </div>
       </div>
