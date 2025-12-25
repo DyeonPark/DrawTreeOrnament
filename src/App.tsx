@@ -260,7 +260,6 @@ function App() {
       try {
         await navigator.share({
           title: treeName ? `${treeName} 🎄` : 'My Christmas Tree 🎄',
-          text: 'Come decorate my tree!',
           url: shareUrl,
         });
       } catch (err) {

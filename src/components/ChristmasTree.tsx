@@ -105,8 +105,18 @@ const ChristmasTree = ({ ornaments = [] }: ChristmasTreeProps) => {
                     filter="url(#dropShadow)"
                 />
 
-                {/* Star at Top - Adjusted y from 70 to 60 and added dominant-baseline */}
-                <text x="150" y="60" fontSize="45" textAnchor="middle" dominantBaseline="middle" filter="url(#dropShadow)">⭐</text>
+                {/* Reverted to Emoji Star - Centered perfectly with SVG attributes */}
+                <text
+                    x="150"
+                    y="55"
+                    fontSize="45"
+                    textAnchor="middle"
+                    dominantBaseline="central"
+                    filter="url(#dropShadow)"
+                    style={{ userSelect: 'none' }}
+                >
+                    ⭐
+                </text>
 
                 {/* Ornaments */}
                 {ornaments.map((src, index) => {

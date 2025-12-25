@@ -4,11 +4,13 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.6);
-    z-index: 2000;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 3000;
+    /* Higher than AdBar (2000) */
     display: flex;
     justify-content: center;
     align-items: center;
+    padding: 20px;
 }
 
 .modal-content {
@@ -62,18 +64,39 @@ canvas {
 }
 
 /* Colors */
+.color-picker-container {
+    position: relative;
+    width: 100%;
+}
+
 .color-picker {
     display: flex;
-    gap: 10px;
+    gap: 15px;
     overflow-x: auto;
-    padding-bottom: 5px;
+    padding: 10px 0;
+    /* Vertical breathing room for scaling */
+    padding-right: 40px;
+    /* Space for the fade indicator */
     align-items: center;
     scrollbar-width: none;
-    /* Hide scrollbar */
+    -ms-overflow-style: none;
 }
 
 .color-picker::-webkit-scrollbar {
     display: none;
+}
+
+/* Scroll Hint Fade */
+.color-picker-container::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 40px;
+    background: linear-gradient(to right, transparent, white);
+    pointer-events: none;
+    z-index: 10;
 }
 
 .color-btn {
@@ -83,13 +106,14 @@ canvas {
     border: 2px solid #ddd;
     flex-shrink: 0;
     cursor: pointer;
-    transition: transform 0.1s;
+    transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 .color-btn.active {
-    transform: scale(1.2);
+    transform: scale(1.15);
+    /* Slightly reduced to avoid clipping */
     border-color: #333;
-    box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
 }
 
 /* Size Slider */
@@ -102,6 +126,7 @@ canvas {
 .size-slider {
     flex: 1;
     -webkit-appearance: none;
+    appearance: none;
     height: 4px;
     background: #ddd;
     border-radius: 2px;
@@ -110,6 +135,7 @@ canvas {
 
 .size-slider::-webkit-slider-thumb {
     -webkit-appearance: none;
+    appearance: none;
     width: 16px;
     height: 16px;
     background: #007aff;
@@ -149,6 +175,8 @@ canvas {
     display: flex;
     gap: 10px;
     margin-top: 5px;
+    padding-bottom: env(safe-area-inset-bottom, 20px);
+    /* Extra space for mobile home bar/ads */
 }
 
 .btn-save {

@@ -234,15 +234,17 @@ const DrawingModal = ({ isOpen, onClose, onSave }: DrawingModalProps) => {
 
                 <div className="tools-section">
                     {/* Colors */}
-                    <div className="color-picker">
-                        {COLORS.map(c => (
-                            <button
-                                key={c}
-                                className={`color-btn ${color === c && mode !== 'eraser' ? 'active' : ''}`}
-                                style={{ backgroundColor: c }}
-                                onClick={() => { setColor(c); setMode('brush'); }}
-                            />
-                        ))}
+                    <div className="color-picker-container">
+                        <div className="color-picker">
+                            {COLORS.map(c => (
+                                <button
+                                    key={c}
+                                    className={`color-btn ${color === c && mode !== 'eraser' ? 'active' : ''}`}
+                                    style={{ backgroundColor: c }}
+                                    onClick={() => { setColor(c); setMode('brush'); }}
+                                />
+                            ))}
+                        </div>
                     </div>
 
                     {/* Size Slider */}
