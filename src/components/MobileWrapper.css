@@ -1,0 +1,22 @@
+.mobile-wrapper {
+    width: 100%;
+    max-width: 430px;
+    /* iPhone 14/15 Pro Max width */
+    min-height: 100vh;
+    margin: 0 auto;
+    position: relative;
+    background-color: #1a1a1a;
+    /* Placeholder dark background */
+    overflow-x: hidden;
+    box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+}
+
+@media (min-width: 431px) {
+
+    /* Only ensure body background is distinct on desktop */
+    body {
+        background-color: #111;
+    }
+}
