@@ -271,26 +271,47 @@ function App() {
       {view === 'tree' && (
         <div style={{ position: 'relative', zIndex: 1, width: '100%', height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
 
-          <div style={{ width: '100%', padding: '15px 20px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-            <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-start', marginBottom: '10px' }}>
-              <button
-                onClick={() => {
-                  setView('landing');
-                  setTreeId(null);
-                  setTreeName('');
-                  setOrnaments([]);
-                  const newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname;
-                  window.history.pushState({ path: newUrl }, '', newUrl);
-                }}
-                style={{ background: 'rgba(255,255,255,0.2)', border: 'none', color: 'white', padding: '5px 12px', borderRadius: '15px', cursor: 'pointer', fontSize: '0.8rem', backdropFilter: 'blur(5px)' }}
-              >
-                ← 뒤로가기
-              </button>
-            </div>
+          <div style={{ width: '100%', padding: '15px 20px', display: 'flex', justifyContent: 'center', alignItems: 'center', position: 'relative' }}>
             <div style={{ textAlign: 'center' }}>
               <div style={{ fontSize: '0.9rem', color: '#aaa', marginBottom: '5px' }}>🎄 우리의 크리스마스 트리</div>
               <div style={{ fontSize: '1.2rem', color: 'white', fontWeight: 'bold' }}>{treeName || '크리스마스 트리를 꾸며보세요!'}</div>
             </div>
+            {ornaments.length > 0 && (
+              <button
+                onClick={() => setIsResetConfirmOpen(true)}
+                style={{
+                  position: 'absolute',
+                  right: '20px',
+                  background: 'rgba(255, 255, 255, 0.1)',
+                  border: '1px solid rgba(255, 255, 255, 0.2)',
+                  color: '#ccc',
+                  padding: '8px',
+                  borderRadius: '50%',
+                  cursor: 'pointer',
+                  fontSize: '1.2rem',
+                  width: '40px',
+                  height: '40px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  backdropFilter: 'blur(10px)',
+                  transition: 'all 0.3s ease'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = 'rgba(231, 76, 60, 0.2)';
+                  e.currentTarget.style.borderColor = 'rgba(231, 76, 60, 0.4)';
+                  e.currentTarget.style.color = '#e74c3c';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)';
+                  e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.2)';
+                  e.currentTarget.style.color = '#ccc';
+                }}
+                title="처음부터 다시 꾸미기"
+              >
+                🗑️
+              </button>
+            )}
           </div>
 
           <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%' }}>
@@ -342,18 +363,40 @@ function App() {
               총 {ornaments.length}개의 오너먼트가 달렸어요 ✨
             </div>
 
-            {ornaments.length > 0 && (
-              <button
-                onClick={() => setIsResetConfirmOpen(true)}
-                style={{
-                  background: 'rgba(255, 255, 255, 0.1)', border: '1px solid #777', color: '#ccc',
-                  padding: '8px 16px', borderRadius: '20px', fontSize: '0.8rem',
-                  cursor: 'pointer', marginTop: '10px', position: 'relative', zIndex: 50,
-                }}
-              >
-                🗑️ 처음부터 다시 꾸미기
-              </button>
-            )}
+            <button
+              onClick={() => {
+                setView('landing');
+                setTreeId(null);
+                setTreeName('');
+                setOrnaments([]);
+                const newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname;
+                window.history.pushState({ path: newUrl }, '', newUrl);
+              }}
+              style={{
+                width: '100%',
+                padding: '14px',
+                borderRadius: '12px',
+                border: 'none',
+                background: 'linear-gradient(135deg, #2ecc71, #27ae60)',
+                color: 'white',
+                fontWeight: 'bold',
+                fontSize: '1rem',
+                cursor: 'pointer',
+                boxShadow: '0 4px 12px rgba(46, 204, 113, 0.4)',
+                marginTop: '15px',
+                transition: 'all 0.3s ease'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = 'translateY(-2px)';
+                e.currentTarget.style.boxShadow = '0 6px 16px rgba(46, 204, 113, 0.5)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = 'translateY(0)';
+                e.currentTarget.style.boxShadow = '0 4px 12px rgba(46, 204, 113, 0.4)';
+              }}
+            >
+              🎄 나만의 새 트리 만들기
+            </button>
           </div>
 
           {isResetConfirmOpen && (
