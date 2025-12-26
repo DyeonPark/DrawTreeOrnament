@@ -1,14 +1,30 @@
 // Manually generate card image using Canvas API
 // This avoids html2canvas issues with SVG images
 
+// Coordinates based on viewBox="0 0 300 410"
+// Distribution: Top (8) → Middle (12) → Bottom (16) for natural tree shape
+// Top layer in pyramid pattern: 1-2-3-2, all layers with increased spacing
 const ORNAMENT_POSITIONS = [
-    { x: 150, y: 70 }, { x: 90, y: 320 }, { x: 210, y: 320 }, { x: 190, y: 140 }, { x: 110, y: 140 },
-    { x: 150, y: 250 }, { x: 135, y: 90 }, { x: 165, y: 90 }, { x: 125, y: 110 }, { x: 175, y: 110 },
-    { x: 150, y: 110 }, { x: 130, y: 160 }, { x: 170, y: 160 }, { x: 100, y: 180 }, { x: 200, y: 180 },
-    { x: 120, y: 190 }, { x: 180, y: 190 }, { x: 150, y: 170 }, { x: 90, y: 200 }, { x: 210, y: 200 },
-    { x: 110, y: 230 }, { x: 190, y: 230 }, { x: 80, y: 240 }, { x: 220, y: 240 }, { x: 130, y: 260 },
-    { x: 170, y: 260 }, { x: 100, y: 270 }, { x: 200, y: 270 }, { x: 120, y: 290 }, { x: 180, y: 290 },
-    { x: 70, y: 300 }, { x: 230, y: 300 }, { x: 140, y: 310 }, { x: 160, y: 310 },
+    // TOP LAYER (y: 80-145) - Pyramid pattern, 8 positions
+    { x: 150, y: 85 },   // 1 at top
+    { x: 125, y: 105 }, { x: 175, y: 105 },  // 2 in second row
+    { x: 105, y: 125 }, { x: 150, y: 125 }, { x: 195, y: 125 },  // 3 in third row
+    { x: 120, y: 142 }, { x: 180, y: 142 },  // 2 in fourth row
+
+    // MIDDLE LAYER (y: 160-240) - Wider spacing, 12 positions
+    { x: 150, y: 165 },
+    { x: 110, y: 185 }, { x: 190, y: 185 },
+    { x: 90, y: 205 }, { x: 210, y: 205 }, { x: 150, y: 210 },
+    { x: 100, y: 225 }, { x: 200, y: 225 },
+    { x: 80, y: 240 }, { x: 220, y: 240 }, { x: 125, y: 238 }, { x: 175, y: 238 },
+
+    // BOTTOM LAYER (y: 255-318) - Maximum spacing, 16 positions
+    { x: 150, y: 258 },
+    { x: 110, y: 272 }, { x: 190, y: 272 },
+    { x: 80, y: 286 }, { x: 220, y: 286 }, { x: 150, y: 290 },
+    { x: 90, y: 302 }, { x: 210, y: 302 }, { x: 120, y: 306 }, { x: 180, y: 306 },
+    { x: 70, y: 315 }, { x: 230, y: 315 }, { x: 100, y: 318 }, { x: 200, y: 318 },
+    { x: 130, y: 318 }, { x: 170, y: 318 },
 ];
 
 export async function generateCardImage(ornaments: string[], treeName: string): Promise<Blob> {
@@ -129,7 +145,7 @@ export async function generateCardImage(ornaments: string[], treeName: string): 
             // Only draw if image loaded successfully
             if (loaded && ornamentImg.complete && ornamentImg.naturalWidth > 0) {
                 const pos = ORNAMENT_POSITIONS[i];
-                ctx.drawImage(ornamentImg, 105 + pos.x - 25, 100 + pos.y - 25, 50, 50);
+                ctx.drawImage(ornamentImg, 105 + pos.x - 20, 100 + pos.y - 20, 40, 40);
             } else {
                 console.warn(`Skipping ornament ${i} - failed to load`);
             }
